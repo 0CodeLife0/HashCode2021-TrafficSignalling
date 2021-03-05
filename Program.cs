@@ -46,9 +46,9 @@ namespace HashCode2021TrafficSignalling
                 intersectionSchedule.IntersectionID = currentIntersection;
                 foreach (var street in allStreets)
                 {
-                    var beginStreet = allcarPaths.Where(p => p.StreetName.IndexOf(street.StreetName) ==0).ToList();
+                    var beginStreet = allcarPaths.Where(p => p.StreetName.IndexOf(street.StreetName) == 0).ToList();
                     var endStreet = allcarPaths.Where(p => p.StreetName.IndexOf(street.StreetName) == p.StreetName.Count - 1).ToList();
-                    if (beginStreet.Count==0&&
+                    if (beginStreet.Count == 0 &&
                         endStreet.Count == allStreets.Count)
                         intersectionNotUsed = true;
 
@@ -78,9 +78,14 @@ namespace HashCode2021TrafficSignalling
                     //}
                 }
                 if (intersectionSchedule != null)
-                { intersectionScheduleList.Add(intersectionSchedule);
-
-                    Console.WriteLine(intersectionScheduleList.Count);
+                {
+                    intersectionSchedule.orderNDurationGreenLights = intersectionSchedule.orderNDurationGreenLights.OrderByDescending(p=>p.GreenSeconds ).ToList();
+                    intersectionScheduleList.Add(intersectionSchedule);
+                    intersectionScheduleList= intersectionScheduleList.OrderByDescending(p =>p.NumberncomingOfStreets).ToList();
+                    
+                    decimal IntersectionPercentage = (decimal)intersectionScheduleList.Count / (decimal)UniqueIntersections.Count;
+                    Console.WriteLine(intersectionScheduleList.Count + " / " + UniqueIntersections.Count +
+                    " = " +IntersectionPercentage );
                 }
             }
             outPutFile.intersectionSchedules = intersectionScheduleList;
